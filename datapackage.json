@@ -1,0 +1,257 @@
+{
+  "name": "zonaseleitorais",
+  "title": "Zonas Eleitorais Brasileiras",
+  "version": "0.0.1",
+  "licenses": [
+    {
+      "id": "CC0-1.0",
+      "title": "CC0 1.0",
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "name": "CC0-1.0",
+      "path": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ],
+  "resources": [
+    {
+      "path": "2016.csv",
+      "profile": "tabular-data-resource",
+      "name": "2016",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "encoding": "UTF-8",
+      "dialect": {
+        "delimiter": ";",
+        "quoteChar": "\""
+      },
+      "schema": {
+        "fields": [
+          {
+            "name": "CD_PROCESSO_ELEITORAL",
+            "type": "integer",
+            "format": "default",
+            "title": "CodProcessoEleitoral",
+            "description": "Código do processo eleitoral"
+          },
+          {
+            "name": "CD_PLEITO",
+            "type": "integer",
+            "format": "default",
+            "title": "CodPleito",
+            "description": "Código do pleito (turno)"
+          },
+          {
+            "name": "SG_UF",
+            "type": "string",
+            "format": "default",
+            "title": "UF",
+            "description": "Sigla da UF"
+          },
+          {
+            "name": "CD_LOCALIDADE_TSE",
+            "type": "integer",
+            "format": "default",
+            "title": "CodLocalidade",
+            "description": "Código da localiadade (no TSE)"
+          },
+          {
+            "name": "NM_LOCALIDADE",
+            "type": "string",
+            "format": "default",
+            "title": "Localidade",
+            "description": "Nome da localidade (Municipio)"
+          },
+          {
+            "name": "NR_ZONA",
+            "type": "integer",
+            "format": "default",
+            "description": "Número da Zona Eleitoral",
+            "title": "NumZona"
+          },
+          {
+            "name": "NR_SECAO",
+            "type": "integer",
+            "format": "default",
+            "title": "NumSecao",
+            "description": "Número da seção (apenas as principais)"
+          },
+          {
+            "name": "ST_SECAO_USA_LOCVOT_TEMP",
+            "type": "string",
+            "format": "default",
+            "description": "Indicador se a seção eleitoral está em um local de votação temporário ou não",
+            "title": "Temp"
+          },
+          {
+            "name": "NR_LOCVOT",
+            "type": "integer",
+            "format": "default",
+            "description": "Número do local de votação (considerando o local temporário, caso se aplique)",
+            "title": "NumLocVot"
+          },
+          {
+            "name": "NM_LOCVOT",
+            "type": "string",
+            "format": "default",
+            "description": "Nome do local de votação (considerando o local temporário, caso se aplique)",
+            "title": "NomeLocVot"
+          },
+          {
+            "name": "DS_ENDERECO",
+            "type": "string",
+            "format": "default",
+            "title": "EndLocVot",
+            "description": "Endereço do local de votação (considerando o local temporário, caso se aplique)"
+          },
+          {
+            "name": "DS_BAIRRO",
+            "type": "string",
+            "format": "default",
+            "title": "BairroLocVot",
+            "description": "Bairro do local de votação (considerando o local temporário, caso se aplique)"
+          },
+          {
+            "name": "NR_CEP",
+            "type": "integer",
+            "format": "default",
+            "title": "CepLocVot",
+            "description": "Cep do local de votação (considerando o local temporário, caso se aplique)"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      }
+    },
+    {
+      "path": "2016_geocoded.csv",
+      "profile": "tabular-data-resource",
+      "name": "2016_geocoded",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "encoding": "UTF-8",
+      "dialect": {
+        "delimiter": ";",
+        "quoteChar": "\""
+      },
+      "schema": {
+        "fields": [
+          {
+            "name": "CD_PROCESSO_ELEITORAL",
+            "type": "integer",
+            "format": "default",
+            "title": "CodProcessoEleitoral",
+            "description": "Código do processo eleitoral"
+          },
+          {
+            "name": "CD_PLEITO",
+            "type": "integer",
+            "format": "default",
+            "title": "CodPleito",
+            "description": "Código do pleito (turno)"
+          },
+          {
+            "name": "SG_UF",
+            "type": "string",
+            "format": "default",
+            "title": "UF",
+            "description": "Sigla da UF"
+          },
+          {
+            "name": "CD_LOCALIDADE_TSE",
+            "type": "integer",
+            "format": "default",
+            "title": "CodLocalidade",
+            "description": "Código da localiadade (no TSE)"
+          },
+          {
+            "name": "NM_LOCALIDADE",
+            "type": "string",
+            "format": "default",
+            "title": "Localidade",
+            "description": "Nome da localidade (Municipio)"
+          },
+          {
+            "name": "NR_ZONA",
+            "type": "integer",
+            "format": "default",
+            "description": "Número da Zona Eleitoral",
+            "title": "NumZona"
+          },
+          {
+            "name": "NR_SECAO",
+            "type": "integer",
+            "format": "default",
+            "title": "NumSecao",
+            "description": "Número da seção (apenas as principais)"
+          },
+          {
+            "name": "ST_SECAO_USA_LOCVOT_TEMP",
+            "type": "string",
+            "format": "default",
+            "description": "Indicador se a seção eleitoral está em um local de votação temporário ou não",
+            "title": "Temp"
+          },
+          {
+            "name": "NR_LOCVOT",
+            "type": "integer",
+            "format": "default",
+            "description": "Número do local de votação (considerando o local temporário, caso se aplique)",
+            "title": "NumLocVot"
+          },
+          {
+            "name": "NM_LOCVOT",
+            "type": "string",
+            "format": "default",
+            "description": "Nome do local de votação (considerando o local temporário, caso se aplique)",
+            "title": "NomeLocVot"
+          },
+          {
+            "name": "DS_ENDERECO",
+            "type": "string",
+            "format": "default",
+            "title": "EndLocVot",
+            "description": "Endereço do local de votação (considerando o local temporário, caso se aplique)"
+          },
+          {
+            "name": "DS_BAIRRO",
+            "type": "string",
+            "format": "default",
+            "title": "BairroLocVot",
+            "description": "Bairro do local de votação (considerando o local temporário, caso se aplique)"
+          },
+          {
+            "name": "NR_CEP",
+            "type": "integer",
+            "format": "default",
+            "title": "CepLocVot",
+            "description": "Cep do local de votação (considerando o local temporário, caso se aplique)"
+          },
+          {
+            "name": "LAT",
+            "type": "number",
+            "format": "default",
+            "title": "Lat",
+            "description": "Latitude (coodenada geográfica) do local de votação"
+          },
+          {
+            "name": "LNG",
+            "type": "number",
+            "format": "default",
+            "title": "Lng",
+            "description": "Longitude (coodenada geográfica) do local de votação"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      }
+    }
+  ],
+  "description": "Dados sobre as zonas eleitorais brasileiras",
+  "contributors": [
+    {
+      "title": "Laboratório Analytics - UFCG",
+      "role": "author"
+    }
+  ]
+}
