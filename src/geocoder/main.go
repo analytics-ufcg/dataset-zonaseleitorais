@@ -45,7 +45,7 @@ func main() {
 	if os.Getenv("GMAPS_API_KEY") == "" {
 		log.Fatalf("GMAPS_API_KEY env var not set.")
 	}
-	pkg, err := datapackage.Load("../../datapackage.json")
+	pkg, err := datapackage.Load("../../zonaseleitorais.zip")
 	if err != nil {
 		log.Fatalf("Error loading data package: %q", err)
 	}
