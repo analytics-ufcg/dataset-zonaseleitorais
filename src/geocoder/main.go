@@ -28,30 +28,33 @@ var geoHeaders = []string{
 	"DS_ENDERECO",
 	"DS_BAIRRO",
 	"NR_CEP",
-	"LAT",
-	"LNG",
+	"LATLNG",
 }
 
 const (
-	PlaceIndex = 9
-	LatIndex   = 13
-	LngIndex   = 14
-	ZipIndex   = 12
-	StateIndex = 2
-	CityIndex  = 4
+	PlaceIndex  = 9
+	LatLngIndex = 13
+	ZipIndex    = 12
+	StateIndex  = 2
+	CityIndex   = 4
 )
 
 func main() {
 	if os.Getenv("GMAPS_API_KEY") == "" {
 		log.Fatalf("GMAPS_API_KEY env var not set.")
 	}
-	pkg, err := datapackage.Load("../../zonaseleitorais.zip")
+	pkgFName := os.Args[1]
+	if pkgFName == "" {
+		log.Fatalf("Usage: ./geocoder [package path]")
+	}
+
+	pkg, err := datapackage.Load(pkgFName)
 	if err != nil {
-		log.Fatalf("Error loading data package: %q", err)
+		log.Fatalf("Error loading data package (%s): %q", pkgFName, err)
 	}
 
 	// 1. Read geocoded file and create a map from where we should proceed.
-	geocodeMap := make(map[string][]string)
+	geocodeMap := make(map[string]string)
 	res2016Geo := pkg.GetResource("2016_geocoded")
 	if res2016Geo == nil {
 		log.Fatalf("Error fetching resource 2016_geocoded")
@@ -63,8 +66,8 @@ func main() {
 	for _, item := range items2016Geo {
 		// Maybe someone improved the algorithm or the place has been picked up by google maps
 		// and now it can be resolved.
-		if item[LatIndex] != "" {
-			geocodeMap[getGeoMapIndex(item)] = []string{item[LatIndex], item[LngIndex]}
+		if item[LatLngIndex] != "" {
+			geocodeMap[getGeoMapIndex(item)] = item[LatLngIndex]
 		}
 	}
 	fmt.Printf("Reused %d coordinates.\n", len(geocodeMap))
@@ -90,18 +93,20 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error reading resource contents: %q", err)
 	}
+	apiCalls := 0
 	for count, item := range items2016 {
 		if _, ok := geocodeMap[getGeoMapIndex(item)]; !ok {
-			addr := fmt.Sprintf("%s,%s,%s,%s,Brazil", item[PlaceIndex], item[ZipIndex], item[CityIndex], item[StateIndex])
+			addr := fmt.Sprintf("%s,%s,%s,%s", item[PlaceIndex], item[ZipIndex], item[CityIndex], item[StateIndex])
 			// Special case: When the address is 0.
 			if item[ZipIndex] == "0" {
-				addr = fmt.Sprintf("%s,%s,%s,Brazil", item[PlaceIndex], item[CityIndex], item[StateIndex])
+				addr = fmt.Sprintf("%s,%s,%s", item[PlaceIndex], item[CityIndex], item[StateIndex])
 			}
 			req := &maps.GeocodingRequest{Address: addr}
 			resp, err := client.Geocode(
 				context.Background(),
 				req,
 			)
+			apiCalls += 1
 			if err != nil {
 				log.Fatalf("Error geocoding item[%s]: %q", spew.Sdump(item), err)
 			}
@@ -126,21 +131,22 @@ func main() {
 			}
 			if r == nil {
 				log.Printf("Could not determine the correct geo coordinate to use. Item:%s\nReq:%s\nResp:%s\n", spew.Sdump(item), spew.Sdump(req), spew.Sdump(resp))
-				geocodeMap[getGeoMapIndex(item)] = []string{"", ""}
+				geocodeMap[getGeoMapIndex(item)] = ""
 			} else {
-				geocodeMap[getGeoMapIndex(item)] = []string{
+				geocodeMap[getGeoMapIndex(item)] = fmt.Sprintf("%s,%s",
 					strconv.FormatFloat(r.Geometry.Location.Lat, 'f', -1, 64),
-					strconv.FormatFloat(r.Geometry.Location.Lng, 'f', -1, 64),
-				}
+					strconv.FormatFloat(r.Geometry.Location.Lng, 'f', -1, 64))
 			}
 			fmt.Printf("Geolocation API called. Record: %+v\n", item)
-			time.Sleep(time.Second / 50)
+			time.Sleep(time.Second / 100)
 		}
-		if err := res2016GeoWriter.Write(append(item, geocodeMap[getGeoMapIndex(item)]...)); err != nil {
+		if err := res2016GeoWriter.Write(append(item, geocodeMap[getGeoMapIndex(item)])); err != nil {
 			log.Fatalf("Error writing record [%v]: %q", item, err)
 		}
 		res2016GeoWriter.Flush()
-		fmt.Printf("Processed:%d records\n", count+1)
+		if (count+1)%10 == 0 {
+			fmt.Printf("Processed %d records, Made %d GMAPS API calls\n", count+1, apiCalls)
+		}
 	}
 }
 

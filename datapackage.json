@@ -227,18 +227,11 @@
             "description": "Cep do local de votação (considerando o local temporário, caso se aplique)"
           },
           {
-            "name": "LAT",
-            "type": "number",
+            "name": "LATLNG",
+            "type": "geopoint",
             "format": "default",
-            "title": "Lat",
-            "description": "Latitude (coodenada geográfica) do local de votação"
-          },
-          {
-            "name": "LNG",
-            "type": "number",
-            "format": "default",
-            "title": "Lng",
-            "description": "Longitude (coodenada geográfica) do local de votação"
+            "title": "LatLng",
+            "description": "Coodenada geográfica do local de votação"
           }
         ],
         "missingValues": [
